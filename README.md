@@ -7,6 +7,8 @@
 This is my first attempt at building an app with [Apollo Server](http://www.apollostack.com/). This project uses [Feathers](http://feathersjs.com) to provide key features in a simple and easy to use way.
 
 Unique aspects of this approach for building Apollo Servers:
+
+
 1. Feathers cli tool to generate boilerplate and new services
 
 2. JWT based auth (todo)
