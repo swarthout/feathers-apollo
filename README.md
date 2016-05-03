@@ -8,11 +8,17 @@ This is my first attempt at building an app with [Apollo Server](http://www.apol
 
 Unique aspects of this approach for building Apollo Servers:
 1. Feathers cli tool to generate boilerplate and new services
+
 2. JWT based auth (todo)
+
 3. No code was manually written for database services
+
 4. Consistent query syntax independent of database (I could change the database from in-memory to Mongo or SQL with no change to the resolvers)
+
 5. Automatic REST endpoint generation (it is nice to have REST as a fallback or for public facing APIs)
+
 6. Express compliant (use any Express middleware without hacks)
+
 7. Automatic Socket.io integration (way to use websockets for real-time features before Apollo's solution is completed)
 
 ## Getting Started
