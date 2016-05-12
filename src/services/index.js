@@ -1,6 +1,9 @@
 'use strict';
 
 
+const graphql = require('./graphql');
+
+
 const comment = require('./comment');
 
 
@@ -17,4 +20,5 @@ module.exports = function() {
   app.configure(post);
   app.configure(author);
   app.configure(comment);
+  app.configure(graphql);
 };
