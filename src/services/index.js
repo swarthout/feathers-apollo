@@ -1,6 +1,6 @@
 'use strict';
 
-
+const mongoose = require('mongoose');
 const user = require('./user');
 const post = require('./post');
 const comment = require('./comment');
@@ -10,6 +10,9 @@ const graphql = require('./graphql');
 
 module.exports = function() {
   const app = this;
+  
+  mongoose.connect(app.get('mongodb'));
+  mongoose.Promise = global.Promise;
 
   app.configure(user);
   app.configure(post);
