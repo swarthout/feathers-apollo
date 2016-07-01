@@ -1,26 +1,29 @@
 'use strict';
 
-const service = require('feathers-memory');
+const service = require('feathers-mongoose');
+const comment = require('./comment-model');
 const hooks = require('./hooks');
 
-module.exports = function () {
+module.exports = function() {
   const app = this;
-  let options = {
-    // paginate: {
-    //   default: 5,
-    //   max: 25
-    // }
+
+  const options = {
+    Model: comment,
+    paginate: {
+      default: 5,
+      max: 25
+    }
   };
 
-// Initialize our service with any options it requires
+  // Initialize our service with any options it requires
   app.use('/comments', service(options));
 
+  // Get our initialize service to that we can bind hooks
   const commentService = app.service('/comments');
 
-// Set up our before hooks
+  // Set up our before hooks
   commentService.before(hooks.before);
 
-// Set up our after hooks
+  // Set up our after hooks
   commentService.after(hooks.after);
-
 };

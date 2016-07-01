@@ -1,68 +1,89 @@
+import verifyPassword from './lib/auth';
+
 export default function Resolvers(){
+  
     let app = this;
-    let postService = app.service('/posts');
-    let authorService = app.service('/authors');
-    let commentService = app.service('/comments');
+    let Posts = app.service('posts');
+    let Users = app.service('users');
+    let Comments = app.service('comments');
+    let Viewer = app.service('viewer');
+    
     return {
-      Author: {
-        posts(root, { id }, context){
-          return postService.find({
+      User: {
+        posts(user, args, context){
+          return Posts.find({
             query: {
-              authorId: id
+              authorId: user._id
             }
-          })
+          });
         }
       },
       Post: {
-        comments(root, { id }, context){
-          return commentService.find({
+        comments(post, { limit }, context){
+          return Comments.find({
             query: {
-              postId: id
-            }
-          })
-        },
-        author(root, { authorId }, context){
-          return authorService.get(authorId)
-        }
-      },
-      Comment: {
-        author(root, { authorId }, context){
-          return authorService.get(authorId)
-        }
-      },
-      RootQuery: {
-        author(root, { firstName, lastName }, context){
-          return authorService.find({
-            query: {
-              firstName: firstName,
-              lastName: lastName
-            }
-          }).then((authors) => authors[ 0 ])
-        },
-        authors(root, args, context){
-          return authorService.find({})
-        },
-        posts(root, { category }, context){
-          return postService.find({
-            query: {
-              category: category
+              postId: post._id
             }
           });
         },
-        post(root, { id }, context){
-          return postService.get(id)
+        author(post, args, context){
+          return Users.get(post.authorId);
+        }
+      },
+      Comment: {
+        author(comment, args, context){
+          return Users.get(comment.authorId);
+        }
+      },
+      AuthPayload : {
+        data(auth, args, context) {
+          return auth.data;
+        }
+      },
+      RootQuery: {
+        viewer(root, args, context) {
+            return Viewer.find(context);
+        },
+        author(root, { username }, context){
+          return Users.find({
+            query: {
+              username
+            }
+          }).then((users) => users[0]);
+        },
+        authors(root, args, context){
+          return Users.find({})
+        },
+        posts(root, { category }, context){
+          return Posts.find({
+            query: {
+              category
+            }
+          });
+        },
+        post(root, { _id }, context){
+          return Posts.get(_id)
         }
       },
 
       RootMutation: {
-        createAuthor(root, args, context){
-          return authorService.create(args)
+        signUp(root, args, context){
+          return Users.create(args)
+        },
+        logIn(root, {username, password}, context){
+          return verifyPassword(app, username, password);
         },
         createPost(root, args, context){
-          return authorService.create(args)
+          return Users.create(args, context);
         },
         createComment(root, args, context){
-          return commentService.create(args)
+          return Comments.create(args, context);
+        },
+        removePost(root, { _id }, context) {
+          return Posts.remove(_id, context);
+        },
+        removeComment(root, { _id }, context) {
+          return Comments.remove(_id, context);
         }
       }
 

@@ -1,5 +1,12 @@
 {
-  "host": "feathers-apollo-app.feathersjs.com",
+  "host": "feathers-apollo.feathersjs.com",
   "port": 80,
-  "public": "../public/"
+  "mongodb": "DATABASE_URL",
+  "public": "../public/",
+  "auth": {
+    "token": {
+      "secret": "FEATHERS_AUTH_SECRET"
+    },
+    "local": {}
+  }
 }

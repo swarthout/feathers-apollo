@@ -1,24 +1,19 @@
 'use strict';
 
 
-const graphql = require('./graphql');
-
-
-const comment = require('./comment');
-
-
-const author = require('./author');
-
-
+const user = require('./user');
 const post = require('./post');
+const comment = require('./comment');
+const viewer = require('./viewer');
+const graphql = require('./graphql');
 
 
 module.exports = function() {
   const app = this;
 
-
+  app.configure(user);
   app.configure(post);
-  app.configure(author);
   app.configure(comment);
+  app.configure(viewer);
   app.configure(graphql);
 };

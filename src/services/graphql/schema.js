@@ -7,59 +7,84 @@ enum Category {
   OTHER
 }
 
-type Author {
-  id: Int! # the ! means that every author object _must_ have an id
+type User {
+  _id: String! # the ! means that every author object _must_ have an id
   firstName: String
   lastName: String
+  username: String!
   posts: [Post] # the list of Posts by this author
 }
 
 type Post {
-  id: Int!
+  _id: String!
   title: String
   category: String
   summary: String
-  content: String
-  timestamp: String
+  content: String!
+  createdAt: String
   comments(limit: Int) : [Comment]
-  author: Author
+  author: User
 }
 
 type Comment {
-  id: Int!
-  content: String
-  author: Author
-  timestamp: String
+  _id: String!
+  content: String!
+  author: User
+  createdAt: String
+}
+
+type AuthPayload {
+  token: String # JSON Web Token
+  data: User
+}
+
+input postInput {
+  title: String!
+  content: String!
+  summary: String
+  category: Category
 }
 
 # the schema allows the following two queries:
 type RootQuery {
-  author(firstName: String, lastName: String): Author
-  authors: [Author]
+  viewer: User
+  author(username: String!): User
+  authors: [User]
   posts(category: Category): [Post]
-  post(id: String!) : Post
+  post(_id: String!) : Post
 }
 
 # this schema allows the following two mutations:
 type RootMutation {
-  createAuthor(
-    firstName: String!
-    lastName: String!
-  ): Author
+  signUp (
+    username: String!
+    password: String!
+    firstName: String
+    lastName: String
+  ): User
+  
+  logIn (
+    username: String!
+    password: String!
+  ): AuthPayload
 
-  createPost(
-    title: String!
-    content: String!
-    summary: String
-    category: Category
-    authorId: Int!
+  createPost (
+    post: postInput
   ): Post
   
-  createComment(
-    postId: Int!
-    content: Int!
-    authorId: Int!
+  createComment (
+    postId: String!
+    content: String!
   ): Comment
+  
+  removePost (
+    _id: String! # _id of post to remove
+  ): Post
+  
+  removeComment (
+    _id: String! # _id of comment to remove
+  ): Comment
+  
 }
 
 # we need to tell the server which types represent the root query

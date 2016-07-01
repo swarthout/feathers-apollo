@@ -9,32 +9,30 @@ exports.before = {
   find: [],
   get: [],
   create: [
-    auth.verifyToken(),
-    auth.populateUser(),
-    auth.restrictToAuthenticated(),
-    auth.associateCurrentUser({as: 'authorId'})
+    auth.hashPassword()
   ],
   update: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    auth.restrictToOwner({ ownerField: 'authorId' })
+    auth.restrictToOwner({ ownerField: '_id' })
   ],
   patch: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    auth.restrictToOwner({ ownerField: 'authorId' })
+    auth.restrictToOwner({ ownerField: '_id' })
   ],
   remove: [
     auth.verifyToken(),
     auth.populateUser(),
     auth.restrictToAuthenticated(),
-    auth.restrictToOwner({ ownerField: 'authorId' })
+    auth.restrictToOwner({ ownerField: '_id' })
   ]
 };
+
 exports.after = {
-  all: [],
+  all: [hooks.remove('password')],
   find: [],
   get: [],
   create: [],

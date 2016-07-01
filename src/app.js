@@ -27,8 +27,9 @@ app.use(compress())
   .configure(hooks())
   .configure(rest())
   .configure(socketio())
-  .configure(middleware)
   .configure(services)
+  .configure(middleware)
+
 
 
 module.exports = app;
