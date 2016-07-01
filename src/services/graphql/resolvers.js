@@ -3,6 +3,7 @@ import verifyPassword from './lib/auth';
 export default function Resolvers(){
   
     let app = this;
+    
     let Posts = app.service('posts');
     let Users = app.service('users');
     let Comments = app.service('comments');

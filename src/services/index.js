@@ -6,6 +6,7 @@ const post = require('./post');
 const comment = require('./comment');
 const viewer = require('./viewer');
 const graphql = require('./graphql');
+const authentication = require('./authentication');
 
 
 module.exports = function() {
@@ -13,7 +14,8 @@ module.exports = function() {
   
   mongoose.connect(app.get('mongodb'));
   mongoose.Promise = global.Promise;
-
+  
+  app.configure(authentication);
   app.configure(user);
   app.configure(post);
   app.configure(comment);

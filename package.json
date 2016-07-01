@@ -24,6 +24,7 @@
     "test": "npm run jshint && npm run mocha",
     "jshint": "jshint src/. test/. --config",
     "start": "babel-node src/",
+    "dev": "nodemon src/ --exec babel-node --presets es2015",
     "mocha": "mocha test/ --compilers js:babel-core/register --recursive"
   },
   "dependencies": {
@@ -53,6 +54,7 @@
     "babel-register": "^6.7.2",
     "jshint": "^2.9.2",
     "mocha": "^2.4.5",
+    "nodemon": "^1.9.2",
     "request": "^2.72.0"
   }
 }
