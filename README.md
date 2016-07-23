@@ -7,6 +7,8 @@
 This is my first attempt at building an app with [Apollo Server](http://www.apollostack.com/). 
 This project uses [Feathers](http://feathersjs.com) to provide key features in a simple and easy to use way.
 
+For an explanation of this repository, check out my blog post walking through the stack at docs/explanation-blog.markdown
+
 Unique aspects of this approach for building Apollo Servers:
 
 
@@ -16,15 +18,13 @@ Unique aspects of this approach for building Apollo Servers:
 
 3. Permissions via feathers hooks (user can only remove and modify own posts, etc.)
 
-4. No code was manually written for database services
+4. Consistent query syntax independent of database (I could change the database from Mongo to SQL with no change to the resolvers)
 
-5. Consistent query syntax independent of database (I could change the database from Mongo to SQL with no change to the resolvers)
+5. Automatic REST endpoint generation (it is nice to have REST as a fallback or for public facing APIs)
 
-6. Automatic REST endpoint generation (it is nice to have REST as a fallback or for public facing APIs)
+6. Express compliant (use any Express middleware without hacks)
 
-7. Express compliant (use any Express middleware without hacks)
-
-8. Automatic Socket.io integration (way to use websockets for real-time features before Apollo's solution is completed)
+7. Automatic Socket.io integration (way to use websockets for real-time features before Apollo's solution is completed)
 
 ## Getting Started
 
