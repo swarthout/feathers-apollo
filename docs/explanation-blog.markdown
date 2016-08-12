@@ -57,7 +57,7 @@ Once the generator finishes, you will have a full application structure for movi
 Now for the magic. Type the following commmands into your command line to get Apollo Server installed.
 
 ```sh
-$ npm install --save apollo-server graphql bcrypt-as-promised jsonwebtoken
+$ npm install --save apollo-server graphql-tools graphql bcrypt-as-promised jsonwebtoken
 $ feathers generate service
 
 ```
@@ -79,27 +79,34 @@ Now go into src/services/graphql and replace the index.js with the following:
 'use strict';
 
 const hooks = require('./hooks');
-import {apolloServer} from 'apollo-server';
+import { apolloExpress, graphiqlExpress } from 'apollo-server';
+import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import Resolvers from  './resolvers';
 import Schema from './schema';
 
-module.exports = function(){
+module.exports = function () {
   const app = this;
 
+  const executableSchema = makeExecutableSchema({
+    typeDefs: Schema,
+    resolvers: Resolvers.call(app)
+  });
+
   // Initialize our service with any options it requires
-  app.use('/graphql', apolloServer((req) => {
+  app.use('/graphql', apolloExpress((req) => {
     let {token, provider} = req.feathers;
     return {
-      graphiql: true,
-      pretty: true,
-      schema: Schema,
-      resolvers: Resolvers.call(app),
+      schema: executableSchema,
       context: {
         token,
         provider
       }
     }
   }));
+
+  app.use('/graphiql', graphiqlExpress({
+    endpointURL: '/graphql',
+  }))
 
 };
 
@@ -268,97 +275,95 @@ Now it is time to start wiring up resolvers! For basic information about how Apo
 
 ```javascript
 // src/services/graphql/resolvers.js
-
 import verifyPassword from './lib/auth';
 
-export default function Resolvers(){
+export default function Resolvers() {
 
-    let app = this;
+  let app = this;
 
-    let Posts = app.service('posts');
-    let Users = app.service('users');
-    let Comments = app.service('comments');
-    let Viewer = app.service('viewer');
+  let Posts = app.service('posts');
+  let Users = app.service('users');
+  let Comments = app.service('comments');
+  let Viewer = app.service('viewer');
 
-    return {
-      User: {
-        posts(user, args, context){
-          return Posts.find({
-            query: {
-              authorId: user._id
-            }
-          });
-        }
-      },
-      Post: {
-        comments(post, { limit }, context){
-          return Comments.find({
-            query: {
-              postId: post._id
-              $limit: limit || 10
-            }
-          });
-        },
-        author(post, args, context){
-          return Users.get(post.authorId);
-        }
-      },
-      Comment: {
-        author(comment, args, context){
-          return Users.get(comment.authorId);
-        }
-      },
-      AuthPayload: {
-        data(auth, args, context) {
-          return auth.data;
-        }
-      },
-      RootQuery: {
-        viewer(root, args, context) {
-            return Viewer.find(context);
-        },
-        author(root, { username }, context){
-          return Users.find({
-            query: {
-              username
-            }
-          }).then((users) => users[0]);
-        },
-        authors(root, args, context){
-          return Users.find({})
-        },
-        posts(root, { category }, context){
-          return Posts.find({
-            query: {
-              category
-            }
-          });
-        },
-        post(root, { _id }, context){
-          return Posts.get(_id)
-        }
-      },
-
-      RootMutation: {
-        signUp(root, args, context){
-          return Users.create(args)
-        },
-        logIn(root, {username, password}, context){
-          return verifyPassword(app, username, password);
-        },
-        createPost(root, args, context){
-          return Users.create(args, context);
-        },
-        createComment(root, args, context){
-          return Comments.create(args, context);
-        },
-        removePost(root, { _id }, context) {
-          return Posts.remove(_id, context);
-        },
-        removeComment(root, { _id }, context) {
-          return Comments.remove(_id, context);
-        }
+  return {
+    User: {
+      posts(user, args, context) {
+        return Posts.find({
+          query: {
+            authorId: user._id
+          }
+        });
       }
+    },
+    Post: {
+      comments(post, { limit }, context) {
+        return Comments.find({
+          query: {
+            postId: post._id
+          }
+        });
+      },
+      author(post, args, context) {
+        return Users.get(post.authorId);
+      }
+    },
+    Comment: {
+      author(comment, args, context) {
+        return Users.get(comment.authorId);
+      }
+    },
+    AuthPayload: {
+      data(auth, args, context) {
+        return auth.data;
+      }
+    },
+    RootQuery: {
+      viewer(root, args, context) {
+        return Viewer.find(context);
+      },
+      author(root, { username }, context) {
+        return Users.find({
+          query: {
+            username
+          }
+        }).then((users) => users[0]);
+      },
+      authors(root, args, context) {
+        return Users.find({})
+      },
+      posts(root, { category }, context) {
+        return Posts.find({
+          query: {
+            category
+          }
+        });
+      },
+      post(root, { _id }, context) {
+        return Posts.get(_id)
+      }
+    },
+
+    RootMutation: {
+      signUp(root, args, context) {
+        return Users.create(args)
+      },
+      logIn(root, {username, password}, context) {
+        return verifyPassword(app, username, password);
+      },
+      createPost(root, {post}, context) {
+        return Posts.create(post, context);
+      },
+      createComment(root, args, context) {
+        return Comments.create(args, context);
+      },
+      removePost(root, { _id }, context) {
+        return Posts.remove(_id, context);
+      },
+      removeComment(root, { _id }, context) {
+        return Comments.remove(_id, context);
+      }
+    }
 
   }
 }
