@@ -47,6 +47,8 @@
     "jsonwebtoken": "^7.0.1",
     "mongoose": "^4.5.3",
     "passport": "^0.3.2",
+    "request": "^2.74.0",
+    "request-promise": "^4.1.1",
     "serve-favicon": "^2.3.0",
     "winston": "^2.2.0"
   },

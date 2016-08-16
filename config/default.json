@@ -4,6 +4,7 @@
   "mongodb": "mongodb://localhost:27017/feathersApollo",
   "public": "../public/",
   "auth": {
+    "usernameField": "username",
     "token": {
       "secret": "P06NqYXvAbgXFP6aJYVxkMeCaJL0cEIX62weZ7R2ECw7f9osKuhoaPyIA3BEEA8ZyMHmqld/Fg0MniYDAwqLUQ=="
     },

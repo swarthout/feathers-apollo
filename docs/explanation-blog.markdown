@@ -275,7 +275,7 @@ Now it is time to start wiring up resolvers! For basic information about how Apo
 
 ```javascript
 // src/services/graphql/resolvers.js
-import verifyPassword from './lib/auth';
+import request from 'request-promise';
 
 export default function Resolvers() {
 
@@ -285,6 +285,11 @@ export default function Resolvers() {
   let Users = app.service('users');
   let Comments = app.service('comments');
   let Viewer = app.service('viewer');
+
+  const localRequest = request.defaults({
+    baseUrl: `http://${app.get('host')}:${app.get('port')}`,
+    json: true
+  });
 
   return {
     User: {
@@ -349,7 +354,11 @@ export default function Resolvers() {
         return Users.create(args)
       },
       logIn(root, {username, password}, context) {
-        return verifyPassword(app, username, password);
+        return localRequest({
+          uri: '/auth/local',
+          method: 'POST',
+          body: { username, password }
+        });
       },
       createPost(root, {post}, context) {
         return Posts.create(post, context);
