@@ -57,7 +57,7 @@ Once the generator finishes, you will have a full application structure for movi
 Now for the magic. Type the following commmands into your command line to get Apollo Server installed.
 
 ```sh
-$ npm install --save apollo-server graphql-tools graphql bcrypt-as-promised jsonwebtoken
+$ npm install --save apollo-server graphql-tools graphql
 $ feathers generate service
 
 ```
