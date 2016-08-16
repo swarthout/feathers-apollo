@@ -29,7 +29,6 @@
   },
   "dependencies": {
     "apollo-server": "^0.2.4",
-    "bcrypt-as-promised": "^1.1.0",
     "body-parser": "^1.15.0",
     "compression": "^1.6.1",
     "cors": "^2.7.1",
@@ -44,7 +43,6 @@
     "feathers-socketio": "^1.4.0",
     "graphql": "^0.6.1",
     "graphql-tools": "^0.6.4",
-    "jsonwebtoken": "^7.0.1",
     "mongoose": "^4.5.3",
     "passport": "^0.3.2",
     "request": "^2.74.0",
