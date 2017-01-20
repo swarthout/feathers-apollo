@@ -1,7 +1,7 @@
 'use strict';
 
 const hooks = require('./hooks');
-import { apolloExpress, graphiqlExpress } from 'apollo-server';
+import { graphqlExpress, graphiqlExpress } from 'graphql-server-express';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import Resolvers from  './resolvers';
 import Schema from './schema';
@@ -15,7 +15,7 @@ module.exports = function () {
   });
 
   // Initialize our service with any options it requires
-  app.use('/graphql', apolloExpress((req) => {
+  app.use('/graphql', graphqlExpress((req) => {
     let {token, provider} = req.feathers;
     return {
       schema: executableSchema,
