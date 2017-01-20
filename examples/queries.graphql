@@ -1,0 +1,23 @@
+{
+  authors {
+    firstName
+    lastName
+    posts {
+      _id
+      title
+      comments {
+        _id
+        content
+      }
+    }
+  }
+}
+
+{
+  author(username: "swarthout") {
+    _id
+    posts {
+      title
+    }
+  }
+}

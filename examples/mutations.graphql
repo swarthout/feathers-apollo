@@ -1,0 +1,37 @@
+mutation {
+  signUp(username: "swarthout", password: "password", firstName: "Scott", lastName: "Swarthout")
+  {
+    _id
+  }
+}
+
+mutation {
+  logIn(username: "swarthout", password: "password") {
+    token
+    data {
+      _id
+    }
+  }
+}
+
+mutation {
+  createPost(post: {
+    title: "Example Post",
+    content: "This is an example",
+    summary: "Example",
+    category: OTHER
+  })
+  {
+    _id
+    title
+  }
+}
+
+mutation {
+  createComment(postId: "588268ebc874c64c1a2abfc3", content: "This was super cool") {
+    _id
+    author {
+      firstName
+    }
+  }
+}
