@@ -5,9 +5,7 @@
   "public": "../public/",
   "auth": {
     "usernameField": "username",
-    "token": {
-      "secret": "FEATHERS_AUTH_SECRET"
-    },
+    "secret": "FEATHERS_AUTH_SECRET",
     "local": {}
   }
 }
