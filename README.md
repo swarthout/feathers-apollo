@@ -1,4 +1,5 @@
-# feathers-apollo
+# WARNING: DEPRECATED
+## feathers-apollo
 
 > feathers apollo integration
 
